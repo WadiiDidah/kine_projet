@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-
+import 'formKine.dart';
+import 'formPatient.dart';
+import 'homeKine.dart';
 class Choix extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -8,14 +10,21 @@ class Choix extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 20, horizontal: 60.0),
           child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(height: 50.0),
-                Image(image:
-                AssetImage("assets/officiel.png")
-
+                Text(
+                  "Welcome",
+                  style: TextStyle(
+                    fontFamily: 'Varela',
+                    fontSize: 30.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
                 ),
+                SizedBox(height: 30.0),
+                Center(child: Image(image: AssetImage("assets/officiel.png"))),
                 SizedBox(height: 10.0),
                 Center(
                     child: Text(
@@ -42,58 +51,60 @@ class Choix extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-
                     ElevatedButton(
                       child: Text('Kiné'),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => FormKine(page:"kine")));
+                      },
                       style: ElevatedButton.styleFrom(
                           primary: Colors.blueAccent,
-                          padding: EdgeInsets.symmetric(horizontal:70, vertical: 10),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 100, vertical: 10),
                           textStyle: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold)),
+                              fontSize: 15, fontWeight: FontWeight.bold)),
                     ),
-
                   ],
                 ),
                 SizedBox(height: 50.0),
                 Center(
                     child: Text(
-                      "Vous êtes patient",
-                      style: TextStyle(
-                        fontFamily: 'Varela',
-                        fontSize: 19.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    )),
+                  "Vous êtes patient",
+                  style: TextStyle(
+                    fontFamily: 'Varela',
+                    fontSize: 19.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                )),
                 SizedBox(height: 10.0),
                 Center(
                     child: Text(
-                      "Cliquez sur le bouton",
-                      style: TextStyle(
-                        fontFamily: 'Varela',
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey,
-                      ),
-                    )),
+                  "Cliquez sur le bouton",
+                  style: TextStyle(
+                    fontFamily: 'Varela',
+                    fontSize: 15.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey,
+                  ),
+                )),
                 SizedBox(height: 20.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-
                     ElevatedButton(
                       child: Text('Patient'),
-                      onPressed: () {},
+                      onPressed: () {
+                        //Navigator.of(context).push(MaterialPageRoute(builder: (context) => FormPatient(page:"patient")));
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => FormPatient(page: "patient")));
+
+                      },
                       style: ElevatedButton.styleFrom(
                           primary: Colors.blueAccent,
-                          padding: EdgeInsets.symmetric(horizontal:70, vertical: 10),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 100, vertical: 10),
                           textStyle: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold)),
+                              fontSize: 15, fontWeight: FontWeight.bold)),
                     ),
-
                   ],
                 ),
                 SizedBox(height: 150.0),

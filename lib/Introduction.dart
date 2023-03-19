@@ -14,7 +14,7 @@ class Introduction extends StatelessWidget {
         child: Container(
           decoration: new BoxDecoration(color: Colors.blue),
           child: new Center(
-            child: Image(image: AssetImage("assets/Logo.png")),
+            child: Image(image: AssetImage("assets/officiel.png")),
           ),
         ));
   }
