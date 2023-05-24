@@ -1,5 +1,12 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:kine/LocalDatabase/DatabaseProvider.dart';
+import 'package:kine/api/WebSocketProvider.dart';
+import 'package:kine/homeKine.dart';
+import 'api/authservice.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'api/httpApi.dart';
 
 class FormKine extends StatefulWidget {
@@ -20,6 +27,7 @@ class _FormKine extends State<FormKine> {
     // TODO: implement initState
     super.initState();
 
+    DatabaseProvider().removeToken();
     print("oke");
     print(page);
   }
@@ -52,7 +60,7 @@ class _FormKine extends State<FormKine> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(height: 50.0),
-                Text(
+                const Text(
                   "Espace Kiné",
                   style: TextStyle(
                     fontFamily: 'Varela',
@@ -61,10 +69,10 @@ class _FormKine extends State<FormKine> {
                     color: Colors.black,
                   ),
                 ),
-                SizedBox(height: 30.0),
-                Center(child: Image(image: AssetImage("assets/officiel.png"))),
-                SizedBox(height: 10.0),
-                Center(
+                const SizedBox(height: 30.0),
+                const Center(child: Image(image: AssetImage("assets/officiel.png"))),
+                const SizedBox(height: 10.0),
+                const Center(
                     child: Text(
                   "Vous êtes kiné",
                   style: TextStyle(
@@ -74,11 +82,11 @@ class _FormKine extends State<FormKine> {
                     color: Colors.black,
                   ),
                 )),
-                SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
                 TextFormField(
                   controller: loginController,
                   keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: "Login",
                     border: OutlineInputBorder(),
                     prefixIcon: Icon(Icons.email),
@@ -120,17 +128,47 @@ class _FormKine extends State<FormKine> {
                     var login = loginController.text.toString();
                     var password = passController.text.toString();
 
-                    var response = await checkPatient(login, password);
+                    //var response = await checkPatient(login, password);
+                    var response = await AuthService().loginKine(login, password);
                     setState(() {});
-                    if (response.body != "false") {
-                      var responseJson = json.decode(response.body);
-                      print(
-                          "la reponse est " + responseJson["login"].toString());
-                      message_eror ="";
+                    if (response != null) {
+                      final responseData = json.decode(response.toString());
+
+                      if (responseData['success'] == true) {
+                        // Login successful
+                        final message = responseData['msg'];
+                        final token = responseData['token'];
+
+                        // on stocke le token en shared preference
+                        DatabaseProvider().storeToken(token);
+
+                        print('Login successful: $message');
+                        print('token : $token');
+
+                        AuthService().getInfoUser(token).then((val){
+                          Fluttertoast.showToast(
+                            msg: val.data['msg'],
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                          );
+                        });
+                        ///final responseD = json.decode(rep.toString());
+
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => HomeKine(role: 'kine',)
+                            )
+                        );
+
+                        //Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomeKine() ));
+
+                      } else {
+                        // Login failed
+                        final message = responseData['msg'];
+                        print('Login failed: $message');
+                      }
                     } else {
-                      print("la reponse est " + response.body);
-                      message_eror =
-                          "Mot de passe ou identifinat sont incorrects";
+                      // Request failed or encountered an error
+                      print('Login request failed');
                     }
                   },
                   child: Container(

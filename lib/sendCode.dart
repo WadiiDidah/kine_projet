@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:kine/api/authservice.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'api/httpApi.dart';
@@ -33,11 +34,10 @@ class _SendCode extends State<SendCode> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    print("les identifnats reçus sont : " +
+    print("${"les identifnats reçus sont : " +
         this.login +
         " " +
-        this.password +
-        " " +
+        this.password} " +
         this.num);
   }
 
@@ -184,11 +184,12 @@ class _SendCode extends State<SendCode> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10))),
                     onPressed: () async {
-                      //String result = await verifyCode(pin_saisi);
-                      String result ="true";
+                      String result = await verifyCode(pin_saisi);
+                      //String result ="true";
                       print("le resultat est ******: "+result);
                       if (result == "true") {
-                        inscrirePatient(this.login, this.password, this.num);
+                        AuthService().adduser(this.login, this.password, this.num);
+                        //inscrirePatient(this.login, this.password, this.num);
                         showSucces();
                       } else
                         showError();

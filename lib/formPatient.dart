@@ -1,7 +1,14 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:kine/api/authservice.dart';
+import 'package:kine/homePatient.dart';
+import 'package:provider/provider.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'LocalDatabase/DatabaseProvider.dart';
+import 'api/WebSocketProvider.dart';
 import'api/httpApi.dart';
 import 'inscription.dart';
 
@@ -24,6 +31,7 @@ class _FormPatient extends State<FormPatient> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    DatabaseProvider().removeToken();
 
     print("oke");
     print(page);
@@ -59,19 +67,21 @@ class _FormPatient extends State<FormPatient> {
 
   @override
   Widget build(BuildContext context) {
+    final webSocketProvider = Provider.of<WebSocketProvider>(context);
+    final messages = webSocketProvider.messages;
     // TODO: implement build
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 60.0),
+          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 60.0),
           child: Form(
             key: _keyForm,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: 50.0),
-                Text(
+                const SizedBox(height: 50.0),
+                const Text(
                   "Espace Patient",
                   style: TextStyle(
                     fontFamily: 'Varela',
@@ -80,10 +90,10 @@ class _FormPatient extends State<FormPatient> {
                     color: Colors.black,
                   ),
                 ),
-                SizedBox(height: 30.0),
-                Center(child: Image(image: AssetImage("assets/officiel.png"))),
-                SizedBox(height: 10.0),
-                Center(
+                const SizedBox(height: 30.0),
+                const Center(child: Image(image: AssetImage("assets/officiel.png"))),
+                const SizedBox(height: 10.0),
+                const Center(
                     child: Text(
                       "Vous êtes Patient",
                       style: TextStyle(
@@ -93,17 +103,17 @@ class _FormPatient extends State<FormPatient> {
                         color: Colors.black,
                       ),
                     )),
-                SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
                 TextFormField(
                   controller: loginController,
                   keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: "Login",
                     border: OutlineInputBorder(),
                     prefixIcon: Icon(Icons.email),
                   ),
                 ),
-                SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
                 TextFormField(
                   keyboardType: TextInputType.emailAddress,
                   controller: passController,
@@ -127,13 +137,13 @@ class _FormPatient extends State<FormPatient> {
                   },
                 ),
 
-                SizedBox(height: 3.0),
+                const SizedBox(height: 3.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     TextButton(
                         onPressed: () {},
-                        child: Text(
+                        child: const Text(
                           "Mot de passe oublié?",
                           style: TextStyle(
                             fontSize: 15,
@@ -142,32 +152,69 @@ class _FormPatient extends State<FormPatient> {
                         )),
                   ],
                 ),
-                SizedBox(height: 1.0),
+                const SizedBox(height: 1.0),
 
                 InkWell(
                   onTap: () async {
                     var login = loginController.text.toString();
                     var password = passController.text.toString();
 
-                    var response = await checkPatient(login, password);
+                    //var response = await checkPatient(login, password);
+                    var response = await AuthService().loginClient(login, password);
                     setState(() {});
-                    if (response.body != "false") {
-                      var responseJson = json.decode(response.body);
-                      print(
-                          "la reponse est " + responseJson["login"].toString());
-                      message_eror ="";
-                    } else {
-                      showError();
-                      print("la reponse est " + response.body);
 
+                    if (response != null) {
+                      final responseData = json.decode(response.toString());
+
+                      if (responseData['success'] == true) {
+                        // Login successful
+                        final message = responseData['msg'];
+                        final token = responseData['token'];
+
+                        // Storing the token
+                        void storeToken(String token) async {
+                          SharedPreferences prefs = await SharedPreferences.getInstance();
+                          prefs.setString('token', token);
+                        }
+
+                        storeToken(token);
+
+
+                        print('Login successful: $message');
+                        print('token : $token');
+
+                        AuthService().getInfoUser(token).then((val){
+                          Fluttertoast.showToast(
+                            msg: val.data['msg'],
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                          );
+                        });
+                        ///final responseD = json.decode(rep.toString());
+
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => HomePatient(role: 'user',)
+                          )
+                        );
+                        //Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomePatient() ));
+
+                      } else {
+                        // Login failed
+                        final message = responseData['msg'];
+                        print('Login failed: $message');
+                      }
+                    } else {
+                      // Request failed or encountered an error
+                      print('Login request failed');
                     }
+
                   },
                   child: Container(
                     height: 50,
                     decoration: BoxDecoration(
                         color: Colors.blueAccent,
                         borderRadius: BorderRadius.circular(5)),
-                    child: Center(
+                    child: const Center(
                       child: Text(
                         "Se connecter",
                         style: TextStyle(
@@ -179,17 +226,16 @@ class _FormPatient extends State<FormPatient> {
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     TextButton(
                         onPressed: () {
+
                           Navigator.of(context).push(MaterialPageRoute(builder: (context) => Inscription() ));
-
-
                         },
-                        child: Text(
+                        child: const Text(
                           "Vous n'avez pas de compte?",
                           style: TextStyle(
                             fontSize: 18,
@@ -198,8 +244,6 @@ class _FormPatient extends State<FormPatient> {
                         )),
                   ],
                 ),
-
-
               ],
             ),
           ),
