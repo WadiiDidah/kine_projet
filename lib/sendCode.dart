@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:kine/api/authservice.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
-import 'api/httpApi.dart';
 import 'Verification.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';

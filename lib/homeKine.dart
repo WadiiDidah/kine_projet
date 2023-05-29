@@ -58,6 +58,7 @@ class _HomeKineState extends State<HomeKine> {
           title: const Text(
             "Home Page",
           ),
+          centerTitle: true,
           elevation: 10,
           backgroundColor: Colors.indigoAccent,
         ),

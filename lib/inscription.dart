@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:kine/api/authservice.dart';
 import 'package:kine/formPatient.dart';
-import'api/httpApi.dart';
 import 'Verification.dart';
 import 'verfiWidget.dart';
 import 'sendCode.dart';

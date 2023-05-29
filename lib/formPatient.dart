@@ -9,7 +9,6 @@ import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'LocalDatabase/DatabaseProvider.dart';
 import 'api/WebSocketProvider.dart';
-import'api/httpApi.dart';
 import 'inscription.dart';
 
 
@@ -67,8 +66,7 @@ class _FormPatient extends State<FormPatient> {
 
   @override
   Widget build(BuildContext context) {
-    final webSocketProvider = Provider.of<WebSocketProvider>(context);
-    final messages = webSocketProvider.messages;
+
     // TODO: implement build
     return Scaffold(
       body: SingleChildScrollView(
@@ -171,13 +169,7 @@ class _FormPatient extends State<FormPatient> {
                         final message = responseData['msg'];
                         final token = responseData['token'];
 
-                        // Storing the token
-                        void storeToken(String token) async {
-                          SharedPreferences prefs = await SharedPreferences.getInstance();
-                          prefs.setString('token', token);
-                        }
-
-                        storeToken(token);
+                        DatabaseProvider().storeToken(token);
 
 
                         print('Login successful: $message');

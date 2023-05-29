@@ -31,23 +31,23 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
     // Handle page navigation based on the selected tab index and role
     if (widget.role == 'user') {
       if (index == 0) {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePatient(role: 'user')));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePatient(role: 'user')));
 
       } else if (index == 1) {
         //Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomePatient() ));
       } else if (index == 2) {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const ConversationListPage(role: 'user')));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const ConversationListPage(role: 'user')));
       }else if (index == 3) {
         //Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomePatient() ));
       }
     } else if (widget.role == 'kine') {
       if (index == 0) {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomeKine(role: 'kine')));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeKine(role: 'kine')));
       } else if (index == 1) {
         //Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomePatient() ));
       } else if (index == 2) {
 
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const ConversationListPage(role: 'kine')));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const ConversationListPage(role: 'kine')));
       }else if (index == 3) {
         //Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomePatient() ));
       }
@@ -57,9 +57,6 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
-
-
   }
 
   @override
@@ -69,13 +66,13 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
     // Access the user's role
     String role = roleProvider.role;
     return BottomNavigationBar(
+
       currentIndex: widget.currentIndex,
       onTap: _onTabTapped,
       items: _buildNavigationItems(),
       backgroundColor: Colors.white, // Set the background color
-      selectedItemColor: Colors.blue, // Set the selected item color
+      selectedItemColor: Colors.indigoAccent, // Set the selected item color
       unselectedItemColor: Colors.grey, // Set the unselected item color
-
     );
   }
 
@@ -84,6 +81,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
       return [
         const BottomNavigationBarItem(
           icon: Icon(Icons.home),
+
           label: 'Home',
         ),
         const BottomNavigationBarItem(

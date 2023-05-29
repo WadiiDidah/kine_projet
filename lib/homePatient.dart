@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'LocalDatabase/RoleProvider.dart';
+import 'api/WebSocketProvider.dart';
 import 'api/authservice.dart';
 import 'formKine.dart';
 import 'formPatient.dart';
@@ -34,6 +35,15 @@ class _HomePatientState extends State<HomePatient> {
 
   @override
   Widget build(BuildContext context) {
+
+    final roleProvider = Provider.of<RoleProvider>(context, listen: false);
+
+    // Set the user's role
+    roleProvider.setRole('user');
+
+    final webSocketProvider = Provider.of<WebSocketProvider>(context);
+    final messages = webSocketProvider.messages;
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: _title,
@@ -42,6 +52,7 @@ class _HomePatientState extends State<HomePatient> {
           title: Text(
             "Home Page",
           ),
+          centerTitle: true,
           elevation: 10,
           backgroundColor: Colors.indigoAccent,
         ),
