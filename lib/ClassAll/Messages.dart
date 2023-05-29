@@ -1,12 +1,12 @@
 class Messages {
-  final int id;
+  int? id;
   final int conversationId;
   final String senderId;
   final String content;
   final DateTime sentTime;
 
   Messages({
-    required this.id,
+    this.id,
     required this.conversationId,
     required this.senderId,
     required this.content,
