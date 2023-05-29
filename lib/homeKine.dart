@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'formKine.dart';
 import 'formPatient.dart';
 import 'homeKine.dart';
-import'bottomBar.dart';
+import 'bottomBar.dart';
+import 'rendezVous.dart';
+import 'choix.dart';
+import 'listeClients.dart';
 
 class HomeKine extends StatelessWidget {
   static const String _title = 'Flutter OnePage Design';
@@ -14,19 +17,14 @@ class HomeKine extends StatelessWidget {
       title: _title,
       home: Scaffold(
         appBar: AppBar(
-          // Here we take the value from the MyHomePage object that was created by
-          // the App.build method, and use it to set our appbar title.
-          title: Text(
-            "Home Page",
-          ),
-          elevation: 10,
-          backgroundColor: Colors.indigoAccent,
+          title: Text('Home'),
+          centerTitle: true,
         ),
         body: SingleChildScrollView(
           child: Column(
             children: [
               SizedBox(height: 40),
-              iconSection,
+              iconSection(context),
               lineSection,
               subTitleSection,
               //bottomSection,
@@ -149,75 +147,96 @@ Widget rowSection = Container(
   ),
 );
 
-Widget iconSection = Container(
-  padding: EdgeInsets.all(10),
-  margin: EdgeInsets.fromLTRB(20, 20, 20, 10),
-  child: Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-      Container(
-        child: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                color: Colors.orange,
-                borderRadius: BorderRadius.circular(5),
-              ),
-              child: Icon(
-                Icons.person,
-                color: Colors.white,
-                size: 30,
-              ),
+void redirectToAutrePage(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => DemoApp()),
+  );
+}
+
+Widget iconSection(BuildContext context) {
+  return Container(
+    padding: EdgeInsets.all(10),
+    margin: EdgeInsets.fromLTRB(20, 20, 20, 10),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Container(
+          child: GestureDetector(
+            onTap: () {
+              print("tu as clické");
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => ListeClient()));
+            },
+            child: Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    color: Colors.orange,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Icon(
+                    Icons.person,
+                    color: Colors.white,
+                    size: 30,
+                  ),
+                ),
+                SizedBox(height: 5),
+                Text('Patients')
+              ],
             ),
-            SizedBox(height: 5),
-            Text('Patients')
-          ],
+          ),
         ),
-      ),
-      Container(
-        child: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                color: Colors.blue,
-                borderRadius: BorderRadius.circular(5),
-              ),
-              child: Icon(
-                Icons.calendar_today,
-                color: Colors.white,
-                size: 30,
-              ),
+        Container(
+          child: GestureDetector(
+            onTap: () {
+              redirectToAutrePage(context);
+            },
+            child: Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Icon(
+                    Icons.calendar_today,
+                    color: Colors.white,
+                    size: 30,
+                  ),
+                ),
+                SizedBox(height: 5),
+                Text('Rendez-vous')
+              ],
             ),
-            SizedBox(height: 5),
-            Text('Rendez-vous')
-          ],
+          ),
         ),
-      ),
-      Container(
-        child: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                color: Colors.pink,
-                borderRadius: BorderRadius.circular(5),
+        Container(
+          child: Column(
+            children: [
+              Container(
+                padding: EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                  color: Colors.pink,
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Icon(
+                  Icons.data_thresholding_sharp,
+                  color: Colors.white,
+                  size: 30,
+                ),
               ),
-              child: Icon(
-                Icons.data_thresholding_sharp,
-                color: Colors.white,
-                size: 30,
-              ),
-            ),
-            SizedBox(height: 5),
-            Text('Documents')
-          ],
+              SizedBox(height: 5),
+              Text('Documents')
+            ],
+          ),
         ),
-      ),
-    ],
-  ),
-);
+      ],
+    ),
+  );
+}
 
 Widget lineSection = Container(
   color: Colors.grey[200],
@@ -476,7 +495,7 @@ Widget _buildCard(
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Icon(Icons.access_time ,color: Colors.blue),
+                Icon(Icons.access_time, color: Colors.blue),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: Text(" 8 :17AM             ",
@@ -494,7 +513,7 @@ Widget _buildCard(
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Icon(Icons.phone ,color: Colors.blue),
+                Icon(Icons.phone, color: Colors.blue),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: Text(" +3307605543  ",

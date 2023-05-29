@@ -1,13 +1,14 @@
 import 'dart:convert';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:kine/Verification.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
-import'api/httpApi.dart';
+import 'api/httpApi.dart';
 import 'inscription.dart';
-
+import 'validateConnexion.dart';
 
 class FormPatient extends StatefulWidget {
-
   var page;
   var id_post;
 
@@ -15,7 +16,7 @@ class FormPatient extends StatefulWidget {
 
   @override
   State<FormPatient> createState() {
-    return _FormPatient(page:page);
+    return _FormPatient(page: page);
   }
 }
 
@@ -37,14 +38,11 @@ class _FormPatient extends State<FormPatient> {
 
   var shared;
 
-
   bool passToogle = false;
   TextEditingController loginController = new TextEditingController();
   TextEditingController passController = new TextEditingController();
 
   _FormPatient({this.page});
-
-
 
   void showError() {
     QuickAlert.show(
@@ -53,7 +51,7 @@ class _FormPatient extends State<FormPatient> {
       title: 'Oops...',
       confirmBtnText: "Ok",
       text:
-      "l'identifiant ou le mot de passe  est incorrect. Veuillez vérifier et  réessayer",
+          "l'identifiant ou le mot de passe  est incorrect. Veuillez vérifier et  réessayer",
     );
   }
 
@@ -85,14 +83,14 @@ class _FormPatient extends State<FormPatient> {
                 SizedBox(height: 10.0),
                 Center(
                     child: Text(
-                      "Vous êtes Patient",
-                      style: TextStyle(
-                        fontFamily: 'Varela',
-                        fontSize: 19.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    )),
+                  "Vous êtes Patient",
+                  style: TextStyle(
+                    fontFamily: 'Varela',
+                    fontSize: 19.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                )),
                 SizedBox(height: 20.0),
                 TextFormField(
                   controller: loginController,
@@ -126,7 +124,6 @@ class _FormPatient extends State<FormPatient> {
                     //print("la valeur est $value");
                   },
                 ),
-
                 SizedBox(height: 3.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -143,7 +140,6 @@ class _FormPatient extends State<FormPatient> {
                   ],
                 ),
                 SizedBox(height: 1.0),
-
                 InkWell(
                   onTap: () async {
                     var login = loginController.text.toString();
@@ -153,13 +149,21 @@ class _FormPatient extends State<FormPatient> {
                     setState(() {});
                     if (response.body != "false") {
                       var responseJson = json.decode(response.body);
-                      print(
-                          "la reponse est " + responseJson["login"].toString());
-                      message_eror ="";
+                      print("la reponse est " +
+                          responseJson["tel"].toString());
+                      await Firebase.initializeApp();
+                      await sendVerificationCode(
+                          responseJson["tel"].toString());
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => SendCode(
+                              login: loginController.text,
+                              password: passController.text,
+                              num: responseJson["tel"].toString())));
+
+                      message_eror = "";
                     } else {
                       showError();
                       print("la reponse est " + response.body);
-
                     }
                   },
                   child: Container(
@@ -185,9 +189,8 @@ class _FormPatient extends State<FormPatient> {
                   children: [
                     TextButton(
                         onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => Inscription() ));
-
-
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => Inscription()));
                         },
                         child: Text(
                           "Vous n'avez pas de compte?",
@@ -198,8 +201,6 @@ class _FormPatient extends State<FormPatient> {
                         )),
                   ],
                 ),
-
-
               ],
             ),
           ),

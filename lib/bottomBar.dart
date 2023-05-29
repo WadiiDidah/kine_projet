@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-
+import 'package:kine/homeKine.dart';
+import 'choix.dart';
+import 'rendezVous.dart';
 
 class BottomBar extends StatefulWidget {
   @override
@@ -13,9 +15,7 @@ class _BottomBar extends State<BottomBar> with SingleTickerProviderStateMixin {
   var role;
 
   @override
-  void initState() {
-
-  }
+  void initState() {}
 
   @override
   Widget build(BuildContext context) {
@@ -45,30 +45,30 @@ class _BottomBar extends State<BottomBar> with SingleTickerProviderStateMixin {
                     icon: new Icon(Icons.home),
                     color: Colors.blue,
                     onPressed: () {
-
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => HomeKine()));
+                    },
+                  ),
+                  new IconButton(
+                    icon: new Icon(Icons.chat_bubble),
+                    color: Color(0xFF676E79),
+                    onPressed: () async {},
+                  ),
+                  new IconButton(
+                    icon: new Icon(Icons.calendar_month),
+                    color: Color(0xFF676E79),
+                    onPressed: () async {
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => DemoApp()));
                     },
                   ),
                   if (connecte == false)
                     new IconButton(
-                      icon: new Icon(Icons.person),
+                      icon: new Icon(Icons.logout_sharp),
                       color: Color(0xFF676E79),
                       onPressed: () {
-
-                      },
-                    ),
-                  new IconButton(
-                    icon: new Icon(Icons.chat_bubble),
-                    color: Color(0xFF676E79),
-                    onPressed: () async {
-
-                    },
-                  ),
-
-                    new IconButton(
-                      icon: new Icon(Icons.calendar_month),
-                      color: Color(0xFF676E79),
-                      onPressed: () async {
-
+                        Navigator.of(context).push(
+                            MaterialPageRoute(builder: (context) => Choix()));
                       },
                     ),
                 ],
