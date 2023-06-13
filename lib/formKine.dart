@@ -140,6 +140,8 @@ class _FormKine extends State<FormKine> {
 
                         // on stocke le token en shared preference
                         DatabaseProvider().storeToken(token);
+                        DatabaseProvider().storeRole("kine");
+
 
                         print('Login successful: $message');
                         print('token : $token');
@@ -153,7 +155,7 @@ class _FormKine extends State<FormKine> {
                         });
                         ///final responseD = json.decode(rep.toString());
 
-                        Navigator.push(context,
+                        Navigator.pushReplacement(context,
                             MaterialPageRoute(builder: (context) => HomeKine(role: 'kine',)
                             )
                         );

@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "355725868293",
-    "project_id": "sylvan-client-378615",
-    "storage_bucket": "sylvan-client-378615.appspot.com"
+    "project_number": "847760343354",
+    "project_id": "kimnesik-1a41b",
+    "storage_bucket": "kimnesik-1a41b.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:355725868293:android:66969d40d7282a27ab4b6c",
+        "mobilesdk_app_id": "1:847760343354:android:ba063308ecc815414b1003",
         "android_client_info": {
           "package_name": "com.example.kine"
         }
       },
       "oauth_client": [
         {
-          "client_id": "355725868293-34rgesh5bli3rmjpd24s4qs3fk9ghu6c.apps.googleusercontent.com",
+          "client_id": "847760343354-1j5blruaj2avghmq3fin915fpfmhfm87.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDtGtSnkLlrvCFdZ940qsKsCzs72Qn3k4k"
+          "current_key": "AIzaSyB-2xqg5Xmjd3t2Cyh4JHv1G_LY4gv-pEo"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "355725868293-34rgesh5bli3rmjpd24s4qs3fk9ghu6c.apps.googleusercontent.com",
+              "client_id": "847760343354-1j5blruaj2avghmq3fin915fpfmhfm87.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

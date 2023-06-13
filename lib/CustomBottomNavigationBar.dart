@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kine/Message/ConversationListPage.dart';
+import 'package:kine/Profile/profile.dart';
+import 'package:kine/RDV/AppointmentsKinePage.dart';
+import 'package:kine/RDV/AppointmentsPage.dart';
 import 'package:kine/homeKine.dart';
 import 'package:kine/homePatient.dart';
 import 'package:provider/provider.dart';
@@ -34,22 +37,23 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
         Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePatient(role: 'user')));
 
       } else if (index == 1) {
-        //Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomePatient() ));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const Profile()));
       } else if (index == 2) {
         Navigator.push(context, MaterialPageRoute(builder: (context) => const ConversationListPage(role: 'user')));
       }else if (index == 3) {
-        //Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomePatient() ));
+        Navigator.push(context, MaterialPageRoute(builder: (context) =>  AppointmentsPage()));
+
       }
     } else if (widget.role == 'kine') {
       if (index == 0) {
         Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeKine(role: 'kine')));
       } else if (index == 1) {
-        //Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomePatient() ));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const Profile()));
       } else if (index == 2) {
 
         Navigator.push(context, MaterialPageRoute(builder: (context) => const ConversationListPage(role: 'kine')));
       }else if (index == 3) {
-        //Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomePatient() ));
+        Navigator.push(context, MaterialPageRoute(builder: (context) =>  AppointmentsKinePage()));
       }
     }
   }

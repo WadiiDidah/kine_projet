@@ -1,3 +1,4 @@
+import 'package:kine/ClassAll/Appointment.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -9,6 +10,7 @@ class DatabaseProvider {
   static const String dbName = 'conversations.db';
   static const String conversationTable = 'conversations';
   static const String messageTable = 'messages';
+  static const String rdvTable = 'rdv';
 
   late Database db;
 
@@ -39,13 +41,30 @@ class DatabaseProvider {
         sentTime TEXT
       )
       ''');
+
+      await db.execute('''
+      CREATE TABLE $rdvTable (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        title TEXT,
+        motif TEXT,
+        category TEXT,
+        dateTime TEXT,
+        starthour TEXT,
+        endhour TEXT,
+        idkine TEXT,
+        idpatient TEXT,
+        status TEXT,
+        sender TEXT
+      )
+      ''');
+
     });
   }
 
   Future<bool> isConversationExists(String userId, String otherUserId) async {
 
 
-    final List<Map<String, dynamic>> result = await db!.query(
+    final List<Map<String, dynamic>> result = await db.query(
       conversationTable,
       where: 'userId = ? AND otherUserId = ?',
       whereArgs: [userId, otherUserId],
@@ -104,6 +123,174 @@ class DatabaseProvider {
     await db.insert(messageTable, message.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
+
+
+  Future<void> deleteMessage(int id) async {
+    print("deleting message from the database");
+
+    await db.delete(
+      messageTable,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+
+
+  Future<void> insertRdv(Appointment appointment) async {
+    print("insertion en bdd du rendez vous appointment");
+
+    await db.insert(rdvTable, appointment.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<void> deleteAppointment(Appointment appointment) async {
+    print("Deleting appointment from the database");
+
+    await db.delete(
+      rdvTable,
+      where: 'id = ?',
+      whereArgs: [appointment.id],
+    );
+  }
+
+  Future<void> updateAppointment(Appointment updatedAppointment) async {
+
+    print("update en bdd sqflite");
+
+    await db.update(
+      rdvTable,
+      updatedAppointment.toMap(),
+      where: 'id = ?',
+      whereArgs: [updatedAppointment.id],
+    );
+  }
+
+
+
+
+  Future<List<Appointment>> getAllRdvSortByIdAndSender(String userId, String sender) async {
+    final List<Map<String, dynamic>> maps = await db.query(
+      rdvTable,
+      where: 'sender = ? AND (idpatient = ? OR idkine = ?)',
+      whereArgs: [sender, userId, userId]
+    );
+    return List.generate(maps.length, (i) {
+      return Appointment(
+        id: maps[i]['id'],
+        motif: maps[i]['motif'],
+        title: maps[i]['title'],
+        starthour: maps[i]['starthour'],
+        endhour: maps[i]['endhour'],
+        dateTime: DateTime.parse(maps[i]['dateTime']),
+        idkine: maps[i]['idkine'],
+        idpatient: maps[i]['idpatient'],
+        status: maps[i]['status'],
+        sender: maps[i]['sender'],
+        category: maps[i]['category'],
+      );
+    });
+  }
+
+  Future<void> updateAppointmentStatus(Appointment appointment, String newStatus) async {
+    // Convertir la date et l'heure en format texte pour la base de données
+    String formattedDateTime = appointment.dateTime.toIso8601String();
+
+    // Mettre à jour l'enregistrement correspondant dans la base de données
+    await db.update(
+      rdvTable,
+      {'status': newStatus},
+      where: 'id = ?',
+      whereArgs: [appointment.id],
+    );
+  }
+
+
+  Future<List<Appointment>> getAllRdv() async {
+    final List<Map<String, dynamic>> maps = await db.query(
+        rdvTable,
+    );
+    return List.generate(maps.length, (i) {
+      return Appointment(
+        id: maps[i]['id'],
+        motif: maps[i]['motif'],
+        title: maps[i]['title'],
+        starthour: maps[i]['starthour'],
+        endhour: maps[i]['endhour'],
+        dateTime: DateTime.parse(maps[i]['dateTime']),
+        idkine: maps[i]['idkine'],
+        idpatient: maps[i]['idpatient'],
+        status: maps[i]['status'],
+        sender: maps[i]['sender'],
+        category: maps[i]['category'],
+      );
+    });
+  }
+
+  Future<List<Appointment>> getRdvForPatient(int userId) async {
+    final List<Map<String, dynamic>> maps = await db.query(
+      rdvTable,
+      where: 'idpatient = ?',
+      whereArgs: [userId],
+      orderBy: 'sentTime ASC',
+    );
+    return List.generate(maps.length, (i) {
+      return Appointment(
+        id: maps[i]['id'],
+        motif: maps[i]['motif'],
+        title: maps[i]['title'],
+        starthour: maps[i]['starthour'],
+        endhour: maps[i]['endhour'],
+        dateTime: DateTime.parse(maps[i]['dateTime']),
+        idkine: maps[i]['idkine'],
+        idpatient: maps[i]['idpatient'],
+        status: maps[i]['status'],
+        sender: maps[i]['sender'],
+        category: maps[i]['category'],
+      );
+    });
+  }
+
+  Future<Appointment?> getOneRdv(DateTime d, String starthour, String endhour) async {
+    try{
+      print("dans getonerdv");
+
+      print(starthour);
+      print(endhour);
+      final String formattedDateTime = d.toIso8601String();
+
+      print(formattedDateTime);
+      final List<Map<String, dynamic>> maps = await db.query(
+        rdvTable,
+        where: 'dateTime = ? AND starthour = ? AND endhour = ?',
+        whereArgs: [formattedDateTime, starthour, endhour],
+        limit: 1, // Limit the result to one appointment
+      );
+
+      if (maps.isNotEmpty) {
+        print("map not empty");
+        Map<String, dynamic> map = maps.first;
+        return Appointment(
+          id: map['id'],
+          motif: map['motif'],
+          title: map['title'],
+          starthour: map['starthour'],
+          endhour: map['endhour'],
+          dateTime: DateTime.parse(map['dateTime']),
+          idkine: map['idkine'],
+          idpatient: map['idpatient'],
+          status: map['status'],
+          sender: map['sender'],
+          category: map['category'],
+        );
+      }
+     return null;
+    }catch(e){
+      print("ok" + e.toString());
+    }
+
+  }
+
 
   Future<List<Messages>> getMessagesForConversation(int conversationId) async {
     final List<Map<String, dynamic>> maps = await db.query(
@@ -180,9 +367,19 @@ class DatabaseProvider {
     prefs.setString('token', token);
   }
 
+  void storeRole(String role) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('role', role);
+  }
+
   void removeToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove('token');
+  }
+
+  void removeRole() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove('role');
   }
 
   void removeAll() async {
@@ -194,5 +391,7 @@ class DatabaseProvider {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.containsKey('token');
   }
+
+
 
 }

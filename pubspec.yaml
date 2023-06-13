@@ -41,7 +41,9 @@ dependencies:
   cupertino_icons: ^1.0.2
   http: ^0.13.5
   firebase_auth: 4.1.0
-  firebase_core: 2.11.0
+  firebase_core: ^2.13.1
+  firebase_analytics: ^10.4.2
+
   intl_phone_field: ^3.1.0
   pin_code_fields: ^7.4.0
   google_fonts: ^3.0.1
@@ -54,6 +56,13 @@ dependencies:
   provider: ^6.0.1
   sqflite: ^2.0.0
   path:
+  table_calendar: ^2.3.3
+  intl: ^0.17.0
+  firebase_messaging: ^14.6.2
+  flutter_local_notifications: ^14.1.1  # Replace with the latest version
+
+
+
 
 
 

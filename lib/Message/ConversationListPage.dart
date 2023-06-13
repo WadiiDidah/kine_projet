@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -8,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../ClassAll/Conversation.dart';
 import '../ClassAll/Patient.dart';
+import '../Introduction.dart';
 import '../LocalDatabase/DatabaseProvider.dart';
 import '../LocalDatabase/RoleProvider.dart';
 import '../api/WebSocketProvider.dart';
@@ -46,6 +48,7 @@ class _ConversationListPageState extends State<ConversationListPage> {
   late List<Patient> searchResults;
   late final DatabaseProvider databaseProvider;
   late List<Conversation> conversations;
+  late final RoleProvider roleProvider;
 
   bool isSearchResultsVisible = false; // Track the visibility of search results
 
@@ -134,10 +137,23 @@ class _ConversationListPageState extends State<ConversationListPage> {
 
   @override
   void initState()  {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      debugPrint("onMessage:");
+      print("onMessage: $message");
+      final snackBar =
+      SnackBar(content: Text(message.notification?.title ?? ""));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    },
+    );
     super.initState();
     databaseProvider = DatabaseProvider();
     conversations = [];
     searchResults = [];
+    roleProvider = Provider.of<RoleProvider>(context, listen: false);
+
+    // Set the user's role
+    print("le role ${roleProvider.role}");
+
     _fetchConversations();
   }
 
@@ -168,20 +184,35 @@ class _ConversationListPageState extends State<ConversationListPage> {
 
 
 
-    final roleProvider = Provider.of<RoleProvider>(context, listen: false);
 
-    // Set the user's role
-    print("le role ${roleProvider.role}");
 
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Conversations'),
-        automaticallyImplyLeading: false,
-        elevation: 10,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              "Message",
+            ),
+            CupertinoButton(
+              child: const Icon(
+                CupertinoIcons.power,
+                size: 24,
+              ),
+              onPressed: () {
+                DatabaseProvider().removeToken();
+                webSocketProvider.channel?.sink.close();
+                // Rediriger l'utilisateur vers l'écran de connexion
+                Navigator.push(context, MaterialPageRoute(builder: (context) => Introduction()));
+              },
+            ),
+          ],
+        ),
         centerTitle: true,
-        backgroundColor: Colors.indigoAccent,// Disable the automatic return arrow
-
+        elevation: 10,
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.indigoAccent,
       ),
       body: Column(
         children: [
@@ -246,7 +277,7 @@ class _ConversationListPageState extends State<ConversationListPage> {
               itemCount: conversations.length,
               itemBuilder: (context, index) {
                 final conversation = conversations[index];
-                final name = conversation.name ?? 'Unknown'; // Add a null check for the name property
+                final name = conversation.name ; // Add a null check for the name property
                 return ListTile(
                   title: Text(name),
                  // subtitle: Text(conversation.otherUserId),

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kine/Message/ConversationListPage.dart';
@@ -32,6 +33,14 @@ class _ConversationDetailPageState extends State<ConversationDetailPage> {
 
   @override
   void initState() {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      debugPrint("onMessage:");
+      print("onMessage: $message");
+      final snackBar =
+      SnackBar(content: Text(message.notification?.title ?? ""));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    },
+    );
     super.initState();
     databaseProvider = DatabaseProvider();
 
@@ -107,7 +116,7 @@ class _ConversationDetailPageState extends State<ConversationDetailPage> {
     // Set the user's role
     print("le role ${roleProvider.role}");
 
-    final name = widget.nameotherpeople ?? 'Unknown';
+    final name = widget.nameotherpeople ;
     return Scaffold(
       appBar: AppBar(
 

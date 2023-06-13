@@ -30,9 +30,6 @@ class _FormPatient extends State<FormPatient> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    DatabaseProvider().removeToken();
-
-    print("oke");
     print(page);
   }
 
@@ -170,6 +167,7 @@ class _FormPatient extends State<FormPatient> {
                         final token = responseData['token'];
 
                         DatabaseProvider().storeToken(token);
+                        DatabaseProvider().storeRole("user");
 
 
                         print('Login successful: $message');
