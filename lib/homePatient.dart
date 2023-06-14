@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:kine/patientVue.dart';
+import 'package:kine/patient.dart';
 import 'formKine.dart';
 import 'formPatient.dart';
 import 'homeKine.dart';
@@ -213,24 +215,32 @@ Widget iconSection(BuildContext context) {
             ),
           ),
         ),
+
         Container(
-          child: Column(
-            children: [
-              Container(
-                padding: EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                  color: Colors.pink,
-                  borderRadius: BorderRadius.circular(5),
+          child: GestureDetector(
+            onTap: () {
+              print("tu as clické");
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => PatientVue()));
+            },
+            child: Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    color: Colors.pink,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Icon(
+                    Icons.data_thresholding_sharp,
+                    color: Colors.white,
+                    size: 30,
+                  ),
                 ),
-                child: Icon(
-                  Icons.data_thresholding_sharp,
-                  color: Colors.white,
-                  size: 30,
-                ),
-              ),
-              SizedBox(height: 5),
-              Text('Documents')
-            ],
+                SizedBox(height: 5),
+                Text('Profil')
+              ],
+            ),
           ),
         ),
       ],
