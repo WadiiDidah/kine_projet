@@ -7,7 +7,7 @@ import 'rendezVous.dart';
 import 'choix.dart';
 import 'listeClients.dart';
 
-class HomeKine extends StatelessWidget {
+class HomePatient extends StatelessWidget {
   static const String _title = 'Flutter OnePage Design';
 
   @override
@@ -183,7 +183,7 @@ Widget iconSection(BuildContext context) {
                   ),
                 ),
                 SizedBox(height: 5),
-                Text('Patients')
+                Text('Profil')
               ],
             ),
           ),

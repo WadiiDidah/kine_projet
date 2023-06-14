@@ -134,8 +134,8 @@ class _Inscription extends State<Inscription> {
                 ),
                 InkWell(
                   onTap: () async {
-                    /*await Firebase.initializeApp();
-                   await sendVerificationCode(message);*/
+                    await Firebase.initializeApp();
+                   await sendVerificationCode(message);
                     print(message + " " + loginController.text+" "+ passController.text);
                     Navigator.of(context).push(MaterialPageRoute(builder: (context) => SendCode(login:loginController.text ,password:passController.text,num:message)));
 

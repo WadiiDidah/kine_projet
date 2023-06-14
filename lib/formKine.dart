@@ -1,6 +1,13 @@
 import 'dart:convert';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:kine/Verification.dart';
+import 'package:kine/homeKine.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'api/httpApi.dart';
+import 'validateConnexion.dart';
+
 
 class FormKine extends StatefulWidget {
   var page;
@@ -38,6 +45,19 @@ class _FormKine extends State<FormKine> {
 
   _FormKine({this.page});
 
+
+  void showError() {
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.error,
+      title: 'Oops...',
+      confirmBtnText: "Ok",
+      text:
+      "l'identifiant ou le mot de passe  est incorrect. Veuillez vérifier et  réessayer",
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -66,14 +86,14 @@ class _FormKine extends State<FormKine> {
                 SizedBox(height: 10.0),
                 Center(
                     child: Text(
-                  "Vous êtes kiné",
-                  style: TextStyle(
-                    fontFamily: 'Varela',
-                    fontSize: 19.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                )),
+                      "Vous êtes kiné",
+                      style: TextStyle(
+                        fontFamily: 'Varela',
+                        fontSize: 19.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    )),
                 SizedBox(height: 20.0),
                 TextFormField(
                   controller: loginController,
@@ -123,14 +143,24 @@ class _FormKine extends State<FormKine> {
                     var response = await checkPatient(login, password);
                     setState(() {});
                     if (response.body != "false") {
-                      var responseJson = json.decode(response.body);
-                      print(
-                          "la reponse est " + responseJson["login"].toString());
-                      message_eror ="";
+                      /*var responseJson = json.decode(response.body);
+                      print("la reponse est " +
+                          responseJson["tel"].toString());
+                      await Firebase.initializeApp();
+                      await sendVerificationCode(
+                          responseJson["tel"].toString());
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => SendCode(
+                              login: loginController.text,
+                              password: passController.text,
+                              num: responseJson["tel"].toString())));*/
+
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) =>HomeKine()));
+                      message_eror = "";
                     } else {
+                      showError();
                       print("la reponse est " + response.body);
-                      message_eror =
-                          "Mot de passe ou identifinat sont incorrects";
                     }
                   },
                   child: Container(
