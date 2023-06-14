@@ -51,7 +51,7 @@ class _FormPatient extends State<FormPatient> {
       title: 'Oops...',
       confirmBtnText: "Ok",
       text:
-          "l'identifiant ou le mot de passe  est incorrect. Veuillez vérifier et  réessayer",
+      "l'identifiant ou le mot de passe  est incorrect. Veuillez vérifier et  réessayer",
     );
   }
 
@@ -83,14 +83,14 @@ class _FormPatient extends State<FormPatient> {
                 SizedBox(height: 10.0),
                 Center(
                     child: Text(
-                  "Vous êtes Patient",
-                  style: TextStyle(
-                    fontFamily: 'Varela',
-                    fontSize: 19.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                )),
+                      "Vous êtes Patient",
+                      style: TextStyle(
+                        fontFamily: 'Varela',
+                        fontSize: 19.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    )),
                 SizedBox(height: 20.0),
                 TextFormField(
                   controller: loginController,
@@ -147,6 +147,8 @@ class _FormPatient extends State<FormPatient> {
 
                     var response = await checkPatient(login, password);
                     setState(() {});
+
+                    print(response.body);
                     if (response.body != "false") {
                       /*var responseJson = json.decode(response.body);
                       print("la reponse est " +

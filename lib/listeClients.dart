@@ -10,7 +10,7 @@ class ListeClient extends StatefulWidget {
 
 class _HomePageState extends State<ListeClient > {
   final List<Map<String, dynamic>> _allUsers = [
-    {"id": 1, "name": "Didah Wadii", "age": 29},
+    {"id": 1, "name": "Andy", "age": 29},
     {"id": 2, "name": "Aragon", "age": 40},
     {"id": 3, "name": "Bob", "age": 19},
     {"id": 4, "name": "Barbara", "age": 35},
@@ -40,7 +40,7 @@ class _HomePageState extends State<ListeClient > {
     } else {
       results = _allUsers
           .where((user) =>
-              user["name"].toLowerCase().contains(enteredKeyword.toLowerCase()))
+          user["name"].toLowerCase().contains(enteredKeyword.toLowerCase()))
           .toList();
       // we use the toLowerCase() method to make it case-insensitive
     }
@@ -74,38 +74,38 @@ class _HomePageState extends State<ListeClient > {
             Expanded(
               child: _foundUsers.isNotEmpty
                   ? ListView.builder(
-                      itemCount: _foundUsers.length,
-                      itemBuilder: (context, index) => Card(
-                        key: ValueKey(_foundUsers[index]["id"]),
-                        color: Colors.grey,
-                        elevation: 4,
-                        margin: const EdgeInsets.symmetric(vertical: 10),
-                        child: ListTile(
-                          leading: CircleAvatar(
-                            radius: 24,
-                            backgroundImage: AssetImage('assets/icon.png'),
-                          ),
-                          title: Text(_foundUsers[index]['name'],
-                              style: TextStyle(color: Colors.white)),
-                          subtitle: Text(
-                              '${_foundUsers[index]["age"].toString()} years old',
-                              style: TextStyle(color: Colors.white)),
-                          onTap: () {
-                            // Naviguer vers la page de description en passant l'ID en paramètre
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => RootApp(),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    )
-                  : const Text(
-                      'Aucun resultat trouvé',
-                      style: TextStyle(fontSize: 24),
+                itemCount: _foundUsers.length,
+                itemBuilder: (context, index) => Card(
+                  key: ValueKey(_foundUsers[index]["id"]),
+                  color: Colors.grey,
+                  elevation: 4,
+                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      radius: 24,
+                      backgroundImage: AssetImage('assets/icon.png'),
                     ),
+                    title: Text(_foundUsers[index]['name'],
+                        style: TextStyle(color: Colors.white)),
+                    subtitle: Text(
+                        '${_foundUsers[index]["age"].toString()} years old',
+                        style: TextStyle(color: Colors.white)),
+                    onTap: () {
+                      // Naviguer vers la page de description en passant l'ID en paramètre
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RootApp(),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              )
+                  : const Text(
+                'Aucun resultat trouvé',
+                style: TextStyle(fontSize: 24),
+              ),
             ),
           ],
         ),

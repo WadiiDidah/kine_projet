@@ -28,25 +28,25 @@ class Choix extends StatelessWidget {
                 SizedBox(height: 10.0),
                 Center(
                     child: Text(
-                  "Vous êtes kiné",
-                  style: TextStyle(
-                    fontFamily: 'Varela',
-                    fontSize: 19.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                )),
+                      "Vous êtes kiné",
+                      style: TextStyle(
+                        fontFamily: 'Varela',
+                        fontSize: 19.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    )),
                 SizedBox(height: 10.0),
                 Center(
                     child: Text(
-                  "Cliquez sur le bouton",
-                  style: TextStyle(
-                    fontFamily: 'Varela',
-                    fontSize: 15.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.grey,
-                  ),
-                )),
+                      "Cliquez sur le bouton",
+                      style: TextStyle(
+                        fontFamily: 'Varela',
+                        fontSize: 15.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey,
+                      ),
+                    )),
                 SizedBox(height: 20.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -68,25 +68,25 @@ class Choix extends StatelessWidget {
                 SizedBox(height: 50.0),
                 Center(
                     child: Text(
-                  "Vous êtes patient",
-                  style: TextStyle(
-                    fontFamily: 'Varela',
-                    fontSize: 19.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                )),
+                      "Vous êtes patient",
+                      style: TextStyle(
+                        fontFamily: 'Varela',
+                        fontSize: 19.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    )),
                 SizedBox(height: 10.0),
                 Center(
                     child: Text(
-                  "Cliquez sur le bouton",
-                  style: TextStyle(
-                    fontFamily: 'Varela',
-                    fontSize: 15.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.grey,
-                  ),
-                )),
+                      "Cliquez sur le bouton",
+                      style: TextStyle(
+                        fontFamily: 'Varela',
+                        fontSize: 15.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey,
+                      ),
+                    )),
                 SizedBox(height: 20.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,

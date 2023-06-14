@@ -25,9 +25,15 @@ class _DemoAppState extends State<DemoApp> {
   final Map<DateTime,List<CleanCalendarEvent>> events = {
     DateTime (DateTime.now().year,DateTime.now().month,DateTime.now().day):
     [
-
+      CleanCalendarEvent('Event A',
+          startTime: DateTime(
+              DateTime.now().year,DateTime.now().month,DateTime.now().day,10,0),
+          endTime:  DateTime(
+              DateTime.now().year,DateTime.now().month,DateTime.now().day,12,0),
+          description: 'A special event',
+          color: Colors.blue),
     ],
-    
+
 
     DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day + 2):
     [
@@ -97,11 +103,10 @@ class _DemoAppState extends State<DemoApp> {
       DateTime eventDate = DateTime(
           appointment.startDate.year, appointment.startDate.month,
           appointment.startDate.day);
-      CleanCalendarEvent event = CleanCalendarEvent("Rendez-vous avec "+
+      CleanCalendarEvent event = CleanCalendarEvent(
         '${appointment.nom} ${appointment.prenom}',
-        startTime: appointment.startTime,
-        endTime: DateTime(2023,05,
-            30, 10, 0),
+        startTime: appointment.startDate,
+        endTime: appointment.startTime,
         color: Colors.blue,
       );
       addEvent(eventDate, event);
@@ -263,10 +268,10 @@ class _DemoAppState extends State<DemoApp> {
                 Appointment appointment = Appointment(
                   nom: eventName,
                   prenom: patientFirstName,
-                  startDate: startDate,
-                  startTime: startTime,
+                  startDate: DateTime.now(),
+                  startTime: DateTime.now(),
                 );
-                await DatabaseHelper.instance.deleteAllAppointments();
+
                 int result = await DatabaseHelper.instance.insertAppointment(appointment);
                 if (result != 0) {
                   print('Rendez-vous inséré avec succès!');
@@ -280,7 +285,6 @@ class _DemoAppState extends State<DemoApp> {
                   print('Date: ${appointment.startDate}');
                   print('Heure: ${appointment.startTime}');
                   print('------------------------');
-                  print("bien affichéééé !!!! **********");
                 });
 
                 Navigator.pop(context);
@@ -332,67 +336,67 @@ class _DemoAppState extends State<DemoApp> {
       ),
       body:  SafeArea(
         child:Column(
-        children:[
-        Builder(
-        builder: (BuildContext context) {
-      return GestureDetector(
-      onTap: () {
-      // Gérer le clic sur "Ajouter une tâche"
-      // Vous pouvez afficher une boîte de dialogue ou naviguer vers une autre page pour ajouter une tâche.
-      showAlerte(widget.scaffoldKey.currentContext!);
-      print('Ajouter une tâche');
-      },
-      child: Container(
-      width: double.infinity,
-      height: 50,
-      color: Colors.blueAccent,
-      child: Center(
-      child: Text(
-      'Ajouter un rendez-vous +',
-      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-      ),
-      ),
-      ),
-      );
-      },
-        ),
+            children:[
+              Builder(
+                builder: (BuildContext context) {
+                  return GestureDetector(
+                    onTap: () {
+                      // Gérer le clic sur "Ajouter une tâche"
+                      // Vous pouvez afficher une boîte de dialogue ou naviguer vers une autre page pour ajouter une tâche.
+                      showAlerte(widget.scaffoldKey.currentContext!);
+                      print('Ajouter une tâche');
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      height: 50,
+                      color: Colors.blueAccent,
+                      child: Center(
+                        child: Text(
+                          'Ajouter un rendez-vous +',
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
 
-          Expanded(
-            child: SingleChildScrollView(
-              child: Container(
-                height: MediaQuery.of(context).size.height - kToolbarHeight - kBottomNavigationBarHeight,
-                child: Calendar(
-                  startOnMonday: true,
-                  selectedColor: Colors.blue,
-                  todayColor: Colors.red,
-                  eventColor: Colors.green,
-                  eventDoneColor: Colors.amber,
-                  bottomBarColor: Colors.deepOrange,
-                  onRangeSelected: (range) {
-                    print('selected Day ${range.from},${range.to}');
-                  },
-                  onDateSelected: (date) {
-                    return _handleData(date);
-                  },
-                  events: events,
-                  isExpanded: true,
-                  dayOfWeekStyle: TextStyle(
-                    fontSize: 15,
-                    color: Colors.black12,
-                    fontWeight: FontWeight.w100,
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Container(
+                    height: MediaQuery.of(context).size.height - kToolbarHeight - kBottomNavigationBarHeight,
+                    child: Calendar(
+                      startOnMonday: true,
+                      selectedColor: Colors.blue,
+                      todayColor: Colors.red,
+                      eventColor: Colors.green,
+                      eventDoneColor: Colors.amber,
+                      bottomBarColor: Colors.deepOrange,
+                      onRangeSelected: (range) {
+                        print('selected Day ${range.from},${range.to}');
+                      },
+                      onDateSelected: (date) {
+                        return _handleData(date);
+                      },
+                      events: events,
+                      isExpanded: true,
+                      dayOfWeekStyle: TextStyle(
+                        fontSize: 15,
+                        color: Colors.black12,
+                        fontWeight: FontWeight.w100,
+                      ),
+                      bottomBarTextStyle: TextStyle(
+                        color: Colors.white,
+                      ),
+                      hideBottomBar: false,
+                      hideArrows: false,
+                      weekDays: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    ),
                   ),
-                  bottomBarTextStyle: TextStyle(
-                    color: Colors.white,
-                  ),
-                  hideBottomBar: false,
-                  hideArrows: false,
-                  weekDays: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
                 ),
               ),
-            ),
-          ),
 
-        ]),
+            ]),
       ),
       bottomNavigationBar: BottomBar(),
     );

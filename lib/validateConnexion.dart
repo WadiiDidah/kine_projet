@@ -191,6 +191,7 @@ class _SendCode extends State<SendCode> {
                       print("le resultat est ******: "+result);
                       if (result == "true") {
                         showSucces();
+
                         Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomePatient()));
 
                       } else

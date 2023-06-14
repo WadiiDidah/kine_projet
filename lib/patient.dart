@@ -31,7 +31,7 @@ class DatabaseHelper {
     String path = join(databasesPath, 'test.db');
     return await openDatabase(path, version: 1, onCreate: _createDatabase);
   }
-  
+
 
   void _createDatabase(Database db, int version) async {
     await db.execute('''
@@ -177,7 +177,7 @@ class _RootAppState extends State<RootApp> {
           actions: [
             TextButton(
               onPressed: () async {
-                
+
                 DatabaseHelper db = DatabaseHelper();
                 db.deleteAllNotes();
                 print("supprimé");
@@ -323,14 +323,14 @@ class _RootAppState extends State<RootApp> {
                 );
               },
               separatorBuilder: (context, index) =>
-                  const Padding(padding: EdgeInsets.only(right: 5)),
+              const Padding(padding: EdgeInsets.only(right: 5)),
               itemCount: profileCompletionCards.length,
             ),
           ),
           const SizedBox(height: 35),
           ...List.generate(
             customListTiles.length,
-            (index) {
+                (index) {
               final tile = customListTiles[index];
               return Padding(
                 padding: const EdgeInsets.only(bottom: 5),
