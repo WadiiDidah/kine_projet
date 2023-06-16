@@ -17,6 +17,7 @@ import '../Introduction.dart';
 import '../LocalDatabase/RoleProvider.dart';
 import '../api/authservice.dart';
 import 'AppointmentUpdateDialog.dart';
+import 'Calendrier.dart';
 
 
 
@@ -223,7 +224,7 @@ class _AppointmentsKinePage extends State<AppointmentsKinePage> {
                 DatabaseProvider().removeToken();
                 webSocketProvider.channel?.sink.close();
                 // Rediriger l'utilisateur vers l'écran de connexion
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Introduction()));
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Introduction()));
               },
             ),
           ],
@@ -287,7 +288,7 @@ class _AppointmentsKinePage extends State<AppointmentsKinePage> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    //Navigator.push(context, MaterialPageRoute(builder: (context) => KineCalendarPage(appointments: fullCalendarAppointments),),);
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => DemoApp(),),);
                   },
                   child: Text("Calendrier"),
                   style: ElevatedButton.styleFrom(

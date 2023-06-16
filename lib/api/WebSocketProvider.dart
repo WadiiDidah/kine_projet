@@ -12,6 +12,7 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '../ClassAll/Conversation.dart';
 import '../ClassAll/Messages.dart';
+import '../ClassAll/Note.dart';
 import '../LocalDatabase/DatabaseProvider.dart';
 import '../LocalDatabase/RoleProvider.dart';
 import 'authservice.dart';
@@ -316,6 +317,8 @@ class WebSocketProvider extends ChangeNotifier {
             final year = data['year'];
             final month = data['month'];
             final day = data['day'];
+            final sender = data['idkine'];
+
 
             print('starthour: $starthour');
             print('endhour: $endhour');
@@ -324,6 +327,7 @@ class WebSocketProvider extends ChangeNotifier {
 
             DateTime t = DateTime(year, month, day);
             Appointment? app =  await databaseProvider.getOneRdv(t, starthour, endhour);
+            app?.status = "ok";
             print("app : " + app!.toString());
 
             if (app != null) {
@@ -336,7 +340,37 @@ class WebSocketProvider extends ChangeNotifier {
             print(e);
           }
 
-      }
+        } else if (data['type'] == "envoienote") {
+
+
+          try{
+            final note = data['note'];
+            final recipient = data['idpatient'];
+            final year = data['year'];
+            final month = data['month'];
+            final day = data['day'];
+
+            print('note: $note');
+            print('recipient: $recipient');
+            print('year: $year');
+            print('month: $month');
+
+            DateTime t = DateTime(year, month, day);
+
+            final noteadd = Note(
+              patientid: recipient,
+              note: note,
+              dateTime: t,
+            );
+
+            await databaseProvider.insertNote(noteadd);
+
+
+          }catch(e){
+            print(e);
+          }
+
+        }
 
         // Notify listeners about the message update
       } catch (error) {
@@ -639,6 +673,40 @@ class WebSocketProvider extends ChangeNotifier {
     channel?.sink.add(jsonEncode(rdv));
 
   }
+
+
+  Future<void> envoieNoteToPatient(DateTime date, int note, idpatient, String? token) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    String fcmtoken = await AuthService().getFcmtokenById(idpatient, prefs.getString('role'));
+
+
+    if (channel == null ) {
+      print('WebSocket channel is not available');
+      // Handle the scenario when the WebSocket channel is not available
+      return;
+    }
+
+    print('envoie du websocket rdv vers serveur pour deplacer rdv');
+
+    var day = date.day;
+    var month = date.month;
+    var year = date.year;
+
+    final rdv = {
+      'type': 'envoienote',
+      'note': note,
+      'day': day,
+      'month': month,
+      'year': year,
+      'recipient': idpatient,
+      'tokenkine': token,
+      'fcmtoken': fcmtoken
+    };
+    channel?.sink.add(jsonEncode(rdv));
+
+  }
+
 
 
 

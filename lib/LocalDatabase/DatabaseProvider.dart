@@ -1,4 +1,5 @@
 import 'package:kine/ClassAll/Appointment.dart';
+import 'package:kine/ClassAll/Note.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -11,6 +12,7 @@ class DatabaseProvider {
   static const String conversationTable = 'conversations';
   static const String messageTable = 'messages';
   static const String rdvTable = 'rdv';
+  static const String noteTable = 'note';
 
   late Database db;
 
@@ -55,6 +57,15 @@ class DatabaseProvider {
         idpatient TEXT,
         status TEXT,
         sender TEXT
+      )
+      ''');
+
+      await db.execute('''
+      CREATE TABLE $noteTable (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        patientid TEXT,
+        note INTEGER,
+        dateTime TEXT
       )
       ''');
 
@@ -135,6 +146,12 @@ class DatabaseProvider {
     );
   }
 
+  Future<void> insertNote(Note note) async {
+    print("insertion en bdd du rendez vous appointment");
+
+    await db.insert(noteTable, note.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace);
+  }
 
 
   Future<void> insertRdv(Appointment appointment) async {
@@ -227,6 +244,34 @@ class DatabaseProvider {
     });
   }
 
+  Future<Appointment?> getMostRecentRdvForPatient() async {
+    final List<Map<String, dynamic>> maps = await db.query(
+      rdvTable,
+      orderBy: 'dateTime DESC',
+      limit: 1,
+    );
+
+    if (maps.isEmpty) {
+      // No appointment found
+      return null;
+    }
+
+    final appointmentMap = maps.first;
+    return Appointment(
+      id: appointmentMap['id'],
+      motif: appointmentMap['motif'],
+      title: appointmentMap['title'],
+      starthour: appointmentMap['starthour'],
+      endhour: appointmentMap['endhour'],
+      dateTime: DateTime.parse(appointmentMap['dateTime']),
+      idkine: appointmentMap['idkine'],
+      idpatient: appointmentMap['idpatient'],
+      status: appointmentMap['status'],
+      sender: appointmentMap['sender'],
+      category: appointmentMap['category'],
+    );
+  }
+
   Future<List<Appointment>> getRdvForPatient(int userId) async {
     final List<Map<String, dynamic>> maps = await db.query(
       rdvTable,
@@ -247,6 +292,23 @@ class DatabaseProvider {
         status: maps[i]['status'],
         sender: maps[i]['sender'],
         category: maps[i]['category'],
+      );
+    });
+  }
+
+
+  Future<List<Note>> getAllNote(String userId) async {
+    final List<Map<String, dynamic>> maps = await db.query(
+      noteTable,
+      where: 'patientid = ?',
+      whereArgs: [userId],
+    );
+    return List.generate(maps.length, (i) {
+      return Note(
+        id: maps[i]['id'],
+        dateTime: DateTime.parse(maps[i]['dateTime']),
+        patientid: maps[i]['patientid'],
+        note: maps[i]['note'],
       );
     });
   }

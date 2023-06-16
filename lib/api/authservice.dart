@@ -262,6 +262,46 @@ class AuthService {
 
   }
 
+
+  getAllUSerInBdd() async{
+
+    (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate = (client) {
+      client.badCertificateCallback = (cert, host, port) => true;
+      return client;
+    };
+
+
+    try {
+      if (IO.Platform.isAndroid) {
+        print("android la");
+        return await dio.post('https://10.0.2.2:3000/getallusers', data: {
+
+        }, options: Options(contentType: Headers.formUrlEncodedContentType)
+
+        );
+
+      } else {
+        return await dio.post('https://172.20.10.4:3000/getallusers', data: {
+
+        }, options: Options(contentType: Headers.formUrlEncodedContentType)
+        );
+
+      }
+
+    }
+
+    on DioError catch(e) {
+      Fluttertoast.showToast(msg: e.response?.data['msg'],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
+    }
+
+  }
+
   // Cette fonction permet simplement de retourner
   // les informations d'un user en fonction de son token
   getInfoUser(token) async{

@@ -35,9 +35,8 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
     if (widget.role == 'user') {
       if (index == 0) {
         Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePatient(role: 'user')));
-
       } else if (index == 1) {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const Profile()));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const Profile(role: 'user')));
       } else if (index == 2) {
         Navigator.push(context, MaterialPageRoute(builder: (context) => const ConversationListPage(role: 'user')));
       }else if (index == 3) {
@@ -48,9 +47,8 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
       if (index == 0) {
         Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeKine(role: 'kine')));
       } else if (index == 1) {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const Profile()));
+        Navigator.push(context, MaterialPageRoute(builder: (context) =>  const Profile(role: 'kine')));
       } else if (index == 2) {
-
         Navigator.push(context, MaterialPageRoute(builder: (context) => const ConversationListPage(role: 'kine')));
       }else if (index == 3) {
         Navigator.push(context, MaterialPageRoute(builder: (context) =>  AppointmentsKinePage()));
@@ -85,7 +83,6 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
       return [
         const BottomNavigationBarItem(
           icon: Icon(Icons.home),
-
           label: 'Home',
         ),
         const BottomNavigationBarItem(
